@@ -6,6 +6,9 @@ import com.app.ticketservice.service.TicketService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +27,7 @@ public class TicketController {
                 .body(ticketService.findTicketById(id));
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     @PostMapping("/add")
     public ResponseEntity<?> addTicket(@Valid @RequestBody TicketCreateRequest ticketCreateRequest){
         return ResponseEntity
