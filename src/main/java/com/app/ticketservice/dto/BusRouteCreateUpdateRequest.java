@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
-public class BusRouteCreateRequest {
+public class BusRouteCreateUpdateRequest {
     @NotEmpty
     private String departure;
     @NotEmpty

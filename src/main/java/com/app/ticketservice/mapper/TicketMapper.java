@@ -21,7 +21,7 @@ public class TicketMapper {
                 .firstName(ticket.getFirstName())
                 .middleName(ticket.getMiddleName())
                 .lastName(ticket.getLastName())
-                .busRoute(BusRouteMapper.modelToResponseDto(ticket.getBusRoute()))
+                .busRoute(BusRouteMapper.modelToResponse(ticket.getBusRoute()))
                 .build();
     }
 }
