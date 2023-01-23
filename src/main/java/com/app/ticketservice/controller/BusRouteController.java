@@ -1,8 +1,7 @@
 package com.app.ticketservice.controller;
 
-import com.app.ticketservice.dto.BusRouteCreateRequest;
+import com.app.ticketservice.dto.BusRouteCreateUpdateRequest;
 import com.app.ticketservice.dto.BusRouteResponse;
-import com.app.ticketservice.model.BusRoute;
 import com.app.ticketservice.service.BusRouteService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +28,16 @@ public class BusRouteController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<BusRouteResponse> addBusRoute(@Valid @RequestBody BusRouteCreateRequest busRouteCreateRequest){
+    public ResponseEntity<BusRouteResponse> addBusRoute(@Valid @RequestBody BusRouteCreateUpdateRequest busRouteCreateUpdateRequest){
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(busRouteService.save(busRouteCreateRequest));
+                .body(busRouteService.save(busRouteCreateUpdateRequest));
+    }
+
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<BusRouteResponse> updateBusRoute(@PathVariable("id") Long id,
+                                                           @Valid @RequestBody BusRouteCreateUpdateRequest busRouteCreateUpdateRequest){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(busRouteService.update(id, busRouteCreateUpdateRequest));
     }
 }

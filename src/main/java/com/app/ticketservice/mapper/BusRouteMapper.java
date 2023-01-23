@@ -2,10 +2,10 @@ package com.app.ticketservice.mapper;
 
 import com.app.ticketservice.dto.BusRouteResponse;
 import com.app.ticketservice.model.BusRoute;
-import com.app.ticketservice.dto.BusRouteCreateRequest;
+import com.app.ticketservice.dto.BusRouteCreateUpdateRequest;
 
 public class BusRouteMapper {
-    public static BusRouteResponse modelToResponseDto(BusRoute busRoute){
+    public static BusRouteResponse modelToResponse(BusRoute busRoute){
         return BusRouteResponse.builder()
                 .id(busRoute.getId())
                 .departure(busRoute.getDeparture())
@@ -16,13 +16,13 @@ public class BusRouteMapper {
                 .build();
     }
 
-    public static BusRoute createDtoToModel(BusRouteCreateRequest busRouteCreateRequest){
+    public static BusRoute createUpdateDtoToModel(BusRouteCreateUpdateRequest busRouteCreateUpdateRequest){
         return BusRoute.builder()
-                .departure(busRouteCreateRequest.getDeparture())
-                .arrival(busRouteCreateRequest.getArrival())
-                .departureTime(busRouteCreateRequest.getDepartureTime())
-                .ticketPrice(busRouteCreateRequest.getTicketPrice())
-                .availableTickets(busRouteCreateRequest.getAvailableTickets())
+                .departure(busRouteCreateUpdateRequest.getDeparture())
+                .arrival(busRouteCreateUpdateRequest.getArrival())
+                .departureTime(busRouteCreateUpdateRequest.getDepartureTime())
+                .ticketPrice(busRouteCreateUpdateRequest.getTicketPrice())
+                .availableTickets(busRouteCreateUpdateRequest.getAvailableTickets())
                 .build();
     }
 }
