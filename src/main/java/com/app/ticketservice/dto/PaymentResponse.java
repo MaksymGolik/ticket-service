@@ -7,11 +7,12 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class TicketResponse {
+public class PaymentResponse {
     private Long id;
     private String firstName;
     private String middleName;
     private String lastName;
-    private BusRouteResponse busRoute;
-    private String paymentStatus;
+    private double paymentAmount;
+    private String status;
+    private Long ticketId;
 }
