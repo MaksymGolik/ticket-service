@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -39,5 +42,11 @@ public class BusRouteController {
                                                            @Valid @RequestBody BusRouteCreateUpdateRequest busRouteCreateUpdateRequest){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(busRouteService.update(id, busRouteCreateUpdateRequest));
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
+    @PatchMapping("/cancel_ticket_occupation")
+    public ResponseEntity<?> cancelTicketOccupation(@Valid @RequestBody List<Long> failedTickets){
+        return ResponseEntity.ok(busRouteService.cancelTicketOccupation(failedTickets));
     }
 }

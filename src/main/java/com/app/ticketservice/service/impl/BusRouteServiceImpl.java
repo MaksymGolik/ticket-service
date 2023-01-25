@@ -4,13 +4,16 @@ import com.app.ticketservice.dto.BusRouteResponse;
 import com.app.ticketservice.mapper.BusRouteMapper;
 import com.app.ticketservice.dto.BusRouteCreateUpdateRequest;
 import com.app.ticketservice.model.BusRoute;
+import com.app.ticketservice.model.Ticket;
 import com.app.ticketservice.repository.BusRouteRepository;
+import com.app.ticketservice.repository.TicketRepository;
 import com.app.ticketservice.service.BusRouteService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -19,6 +22,7 @@ import java.util.stream.Collectors;
 public class BusRouteServiceImpl implements BusRouteService {
 
     private BusRouteRepository busRouteRepository;
+    private TicketRepository ticketRepository;
 
     @Override
     public List<BusRouteResponse> findAll(Pageable page) {
@@ -47,5 +51,15 @@ public class BusRouteServiceImpl implements BusRouteService {
         BusRoute busRoute = BusRouteMapper.createUpdateDtoToModel(busRouteCreateUpdateRequest);
         busRoute.setId(updatedId.get());
         return BusRouteMapper.modelToResponse(busRouteRepository.save(busRoute));
+    }
+
+    @Override
+    public boolean cancelTicketOccupation(List<Long> failedTicketsId) {
+        Map<BusRoute, Long> failedTickets = ticketRepository
+                .findAllById(failedTicketsId)
+                .stream()
+                .collect(Collectors.groupingBy(Ticket::getBusRoute,Collectors.counting()));
+        failedTickets.forEach((key, value) -> busRouteRepository.refundCancelledTickets(key.getId(), value));
+        return true;
     }
 }
