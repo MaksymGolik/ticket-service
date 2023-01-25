@@ -1,14 +1,15 @@
 package com.app.ticketservice.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
 @Setter
 @Builder
+@Data
 public class BusRouteResponse {
     private Long id;
     private String departure;
