@@ -11,9 +11,13 @@ import com.app.ticketservice.service.BusRouteService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -53,13 +57,15 @@ public class BusRouteServiceImpl implements BusRouteService {
         return BusRouteMapper.modelToResponse(busRouteRepository.save(busRoute));
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     @Override
-    public boolean cancelTicketOccupation(List<Long> failedTicketsId) {
+    public int cancelTicketOccupation(List<Long> failedTicketsId) {
+        AtomicInteger affectedRows = new AtomicInteger(0);
         Map<BusRoute, Long> failedTickets = ticketRepository
                 .findAllById(failedTicketsId)
                 .stream()
                 .collect(Collectors.groupingBy(Ticket::getBusRoute,Collectors.counting()));
-        failedTickets.forEach((key, value) -> busRouteRepository.refundCancelledTickets(key.getId(), value));
-        return true;
+        failedTickets.forEach((key, value) -> affectedRows.addAndGet(busRouteRepository.refundCancelledTickets(key.getId(), value)));
+        return affectedRows.get();
     }
 }

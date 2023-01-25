@@ -27,7 +27,6 @@ public class TicketController {
                 .body(ticketService.findTicketById(id));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     @PostMapping("/add")
     public ResponseEntity<?> addTicket(@Valid @RequestBody TicketCreateRequest ticketCreateRequest){
         return ResponseEntity

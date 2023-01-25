@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,6 +37,7 @@ public class TicketServiceImpl implements TicketService {
         this.busRouteRepository = busRouteRepository;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     @Override
     public TicketResponse save(TicketCreateRequest ticketCreateRequest) {
         AtomicReference<BusRoute> busRoute = new AtomicReference<>();

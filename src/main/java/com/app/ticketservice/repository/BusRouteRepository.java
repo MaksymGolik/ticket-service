@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface BusRouteRepository extends JpaRepository<BusRoute, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE bus_routes SET available_tickets=available_tickets+:ticketAmount WHERE id=:busRouteId")
-    void refundCancelledTickets(@Param("busRouteId") Long busRouteId, @Param("ticketAmount") Long ticketAmount);
+    int refundCancelledTickets(@Param("busRouteId") Long busRouteId, @Param("ticketAmount") Long ticketAmount);
 }

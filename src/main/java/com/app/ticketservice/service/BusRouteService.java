@@ -10,5 +10,5 @@ public interface BusRouteService {
     List<BusRouteResponse> findAll(Pageable page);
     BusRouteResponse save(BusRouteCreateUpdateRequest busRouteCreateUpdateRequest);
     BusRouteResponse update(Long id, BusRouteCreateUpdateRequest busRouteCreateUpdateRequest);
-    boolean cancelTicketOccupation(List<Long> failedTicketsId);
+    int cancelTicketOccupation(List<Long> failedTicketsId);
 }

@@ -44,7 +44,6 @@ public class BusRouteController {
                 .body(busRouteService.update(id, busRouteCreateUpdateRequest));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     @PatchMapping("/cancel_ticket_occupation")
     public ResponseEntity<?> cancelTicketOccupation(@Valid @RequestBody List<Long> failedTickets){
         return ResponseEntity.ok(busRouteService.cancelTicketOccupation(failedTickets));
