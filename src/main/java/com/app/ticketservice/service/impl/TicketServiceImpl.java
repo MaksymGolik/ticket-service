@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -43,6 +44,8 @@ public class TicketServiceImpl implements TicketService {
         AtomicReference<BusRoute> busRoute = new AtomicReference<>();
         busRouteRepository.findById(ticketCreateRequest.getBusRoute())
                 .ifPresentOrElse(busRoute::set,()->{throw new IllegalArgumentException("No bus route found by id " + ticketCreateRequest.getBusRoute());});
+        if(LocalDateTime.now().isBefore(busRoute.get().getDepartureTime()))
+            throw new IllegalArgumentException("Cannot by ticket for bus that already left");
 
         int availableTickets = busRoute.get().getAvailableTickets();
 

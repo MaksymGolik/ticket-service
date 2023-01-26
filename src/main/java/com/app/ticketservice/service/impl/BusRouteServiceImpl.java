@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -38,6 +39,8 @@ public class BusRouteServiceImpl implements BusRouteService {
 
     @Override
     public BusRouteResponse save(BusRouteCreateUpdateRequest busRouteCreateUpdateRequest) {
+        if(LocalDateTime.now().isBefore(busRouteCreateUpdateRequest.getDepartureTime()))
+            throw new IllegalArgumentException("Cannot add bus route in the past");
         return BusRouteMapper.modelToResponse(
                 busRouteRepository.save(
                         BusRouteMapper.createUpdateDtoToModel(busRouteCreateUpdateRequest)));
