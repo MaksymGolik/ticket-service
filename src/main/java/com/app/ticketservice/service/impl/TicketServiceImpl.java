@@ -44,7 +44,7 @@ public class TicketServiceImpl implements TicketService {
         AtomicReference<BusRoute> busRoute = new AtomicReference<>();
         busRouteRepository.findById(ticketCreateRequest.getBusRoute())
                 .ifPresentOrElse(busRoute::set,()->{throw new IllegalArgumentException("No bus route found by id " + ticketCreateRequest.getBusRoute());});
-        if(LocalDateTime.now().isBefore(busRoute.get().getDepartureTime()))
+        if(busRoute.get().getDepartureTime().isBefore(LocalDateTime.now()))
             throw new IllegalArgumentException("Cannot by ticket for bus that already left");
 
         int availableTickets = busRoute.get().getAvailableTickets();

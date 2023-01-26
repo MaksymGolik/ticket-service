@@ -39,7 +39,7 @@ public class BusRouteServiceImpl implements BusRouteService {
 
     @Override
     public BusRouteResponse save(BusRouteCreateUpdateRequest busRouteCreateUpdateRequest) {
-        if(LocalDateTime.now().isBefore(busRouteCreateUpdateRequest.getDepartureTime()))
+        if(busRouteCreateUpdateRequest.getDepartureTime().isBefore(LocalDateTime.now()))
             throw new IllegalArgumentException("Cannot add bus route in the past");
         return BusRouteMapper.modelToResponse(
                 busRouteRepository.save(
